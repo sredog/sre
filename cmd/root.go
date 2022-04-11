@@ -25,6 +25,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/enescakir/emoji"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -35,14 +36,16 @@ var cfgFile string
 var rootCmd = &cobra.Command{
 	Use:   "sre",
 	Short: "SRE's best friend",
-	Long: `SREdog makes systems debugging easier. Have you tried:
+	Long: fmt.Sprintf(`SREdog %v makes systems debugging easier. Have you tried:
 
 sre quick			# quick overview of the system: CPUs, RAM, IO, net, filesystems
+sre pid 123			# overview of process with given PID
 sre use 			# runs Utilisation Saturation and Errors analysis on the system
 free | sre analysis		# finds issues in the output of top, free, vmstat, etc
 sre shell			# starts interactive mode with autocompletion and auto-analysis
 sre tools 			# suggests command line tools to debug various components of the system
-`,
+sre throttle		# lists processes by the amount of time they've been throttled
+`, emoji.DogFace),
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) {
