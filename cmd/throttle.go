@@ -1,5 +1,4 @@
-The MIT License (MIT)
-
+/*
 Copyright © 2022 Mikolaj Pawlikowski <mikolaj@pawlikowski.pl>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -19,3 +18,35 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+*/
+package cmd
+
+import (
+	"fmt"
+
+	"github.com/spf13/cobra"
+)
+
+// throttleCmd represents the throttle command
+var throttleCmd = &cobra.Command{
+	Use:   "throttle",
+	Short: "List CPU-throttled processes",
+	Long:  ``,
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("throttle called")
+	},
+}
+
+func init() {
+	rootCmd.AddCommand(throttleCmd)
+
+	// Here you will define your flags and configuration settings.
+
+	// Cobra supports Persistent Flags which will work for this command
+	// and all subcommands, e.g.:
+	// throttleCmd.PersistentFlags().String("foo", "", "A help for foo")
+
+	// Cobra supports local flags which will only run when this command
+	// is called directly, e.g.:
+	// throttleCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+}
