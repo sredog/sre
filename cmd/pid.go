@@ -24,51 +24,29 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/prometheus/procfs"
 	"github.com/spf13/cobra"
-	"github.com/sredog/sre/pkg/uptime"
 )
 
-// quickCmd represents the quick command
-var quickCmd = &cobra.Command{
-	Use:   "quick",
-	Short: "Quick overview of the system: CPUs, RAM, IO, net, filesystems",
-	Long:  ``,
+// pidCmd represents the pid command
+var pidCmd = &cobra.Command{
+	Use:   "pid",
+	Short: "Display info per-process",
+	Long:  `.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("quick called")
-		p, err := procfs.NewDefaultFS()
-		if err != nil {
-			panic(err)
-		}
-		la, err := p.LoadAvg()
-		if err != nil {
-			panic(err)
-		}
-		_, err = fmt.Printf("Load averages: %v, %v, %v\n", la.Load1, la.Load5, la.Load15)
-		if err != nil {
-			panic(err)
-		}
-		uptime, err := uptime.NewUptime(2)
-		if err != nil {
-			panic(err)
-		}
-		_, err = fmt.Printf("Uptime %v, %v\n", uptime.Uptime, uptime.Idle)
-		if err != nil {
-			panic(err)
-		}
+		fmt.Println("pid called")
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(quickCmd)
+	rootCmd.AddCommand(pidCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// quickCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// pidCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// quickCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// pidCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

@@ -31,6 +31,8 @@ import (
 )
 
 var cfgFile string
+var procfsLocation string
+var outputFormat string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -70,6 +72,8 @@ func init() {
 	// will be global for your application.
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.sre.yaml)")
+	rootCmd.PersistentFlags().StringVar(&procfsLocation, "procfs", "/proc", "procfs location")
+	rootCmd.PersistentFlags().StringVar(&outputFormat, "output", "human", "output format: human, json")
 }
 
 // initConfig reads in config file and ENV variables if set.
