@@ -45,5 +45,9 @@ func (la *KernelRingBufferProbe) Display() string {
 }
 
 func (la *KernelRingBufferProbe) Analysis() (observations []*analysis.Observation) {
+	observations = append(observations, &analysis.Observation{
+		Type:    analysis.Learn,
+		Message: "To browse through all kernel ring buffer, use: dmesg --decode --human",
+	})
 	return
 }
