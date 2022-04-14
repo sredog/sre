@@ -3,7 +3,6 @@ package analysis
 import (
 	"fmt"
 
-	"github.com/enescakir/emoji"
 	"github.com/fatih/color"
 )
 
@@ -11,9 +10,9 @@ type ObservationType int64
 
 const (
 	Note ObservationType = iota
+	Hint
 	Warning
 	Issue
-	Hint
 )
 
 type Observation struct {
@@ -28,26 +27,28 @@ type Analyser interface {
 
 func (o *Observation) ToString() string {
 	switch o.Type {
-	case Note:
+	default:
 		return "Note"
+	case Hint:
+		return "Hint"
 	case Warning:
 		return "Warning"
 	case Issue:
 		return "Issue"
 	}
-	return "Note"
 }
 
 func (o *Observation) Format() string {
-	symbol := emoji.RightArrow
+	var textColor *color.Color
 	switch o.Type {
 	case Note:
-		symbol = emoji.Notebook
+		textColor = color.New(color.Bold)
 	case Warning:
-		symbol = emoji.Warning
+		textColor = color.New(color.Bold, color.Underline)
 	case Issue:
-		symbol = emoji.Prohibited
+		textColor = color.New(color.Bold, color.BgHiRed)
+	default:
+		textColor = color.New(color.BgGreen)
 	}
-	bold := color.New(color.Bold)
-	return fmt.Sprintf("%v %s: %s", symbol, bold.Sprint(o.ToString()), o.Message)
+	return fmt.Sprintf("%s: %s", textColor.Sprint(o.ToString()), o.Message)
 }
