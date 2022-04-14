@@ -26,6 +26,7 @@ import (
 
 	"github.com/prometheus/procfs"
 	"github.com/spf13/cobra"
+	"github.com/sredog/sre/pkg/analysis"
 	"github.com/sredog/sre/pkg/uptime"
 )
 
@@ -36,13 +37,26 @@ var quickCmd = &cobra.Command{
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 
+		var probes []analysis.Probe
+
 		uptime, err := uptime.NewUptime(2)
 		if err != nil {
 			panic(err)
 		}
-		_, err = fmt.Print(uptime.Display())
-		if err != nil {
-			panic(err)
+		probes = append(probes, uptime)
+
+		for _, probe := range probes {
+			output := probe.Display()
+			_, err = fmt.Print(output)
+			if err != nil {
+				panic(err)
+			}
+			for _, observation := range probe.Analysis() {
+				_, err = fmt.Printf("%s\n", observation.Format())
+				if err != nil {
+					panic(err)
+				}
+			}
 		}
 
 		p, err := procfs.NewDefaultFS()

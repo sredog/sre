@@ -9,6 +9,7 @@ import (
 
 	"github.com/enescakir/emoji"
 	"github.com/fatih/color"
+	"github.com/sredog/sre/pkg/analysis"
 )
 
 const uptimePath = "/proc/uptime"
@@ -49,8 +50,14 @@ func NewUptime(CPUCount int) (*Uptime, error) {
 	return u, nil
 }
 
+// Utilization returns ratio spent outside Idle process since boot
+// averaged out by the number of cpus
+func (u *Uptime) Utilization() float64 {
+	return 1 - (float64(u.Idle)/float64(u.CPUCount))/float64(u.Uptime)
+}
+
 const displayFormat = `%v Uptime %v (boot @ %v)
-%v Idle time %0.2f%% (%v with %d CPUs)
+%v Idle time %v (%v with %d CPUs)
 `
 
 func (u *Uptime) Display() string {
@@ -60,8 +67,18 @@ func (u *Uptime) Display() string {
 		bold.Sprint(u.Uptime.String()),
 		time.Now().Add(u.Uptime*-1).Format(time.UnixDate),
 		emoji.SleepingFace,
-		(float64(u.Idle)/float64(u.CPUCount))/float64(u.Uptime)*100,
+		bold.Sprintf("%0.2f%%", (1-u.Utilization())*100),
 		u.Idle,
 		u.CPUCount,
 	)
+}
+
+func (u *Uptime) Analysis() (observations []*analysis.Observation) {
+	if u.Uptime < time.Hour*time.Duration(24) {
+		observations = append(observations, &analysis.Observation{
+			Type:    analysis.Note,
+			Message: fmt.Sprintf("This machine restarted recently (%v ago)", u.Uptime),
+		})
+	}
+	return
 }
