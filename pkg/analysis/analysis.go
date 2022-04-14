@@ -26,16 +26,7 @@ type Analyser interface {
 }
 
 func (o *Observation) ToString() string {
-	switch o.Type {
-	default:
-		return "Note"
-	case Hint:
-		return "Hint"
-	case Warning:
-		return "Warning"
-	case Issue:
-		return "Issue"
-	}
+	return [...]string{"Hint", "Note", "Warning", "Issue"}[o.Type]
 }
 
 func (o *Observation) Format() string {
