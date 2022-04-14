@@ -27,6 +27,7 @@ import (
 	"github.com/prometheus/procfs"
 	"github.com/spf13/cobra"
 	"github.com/sredog/sre/pkg/analysis"
+	"github.com/sredog/sre/pkg/kmsgprobe"
 	"github.com/sredog/sre/pkg/loadavg"
 	"github.com/sredog/sre/pkg/uptime"
 )
@@ -56,6 +57,12 @@ var quickCmd = &cobra.Command{
 			panic(err)
 		}
 		probes = append(probes, la)
+
+		krbp, err := kmsgprobe.NewKernelRingBufferProbe()
+		if err != nil {
+			panic(err)
+		}
+		probes = append(probes, krbp)
 
 		for _, probe := range probes {
 			output := probe.Display()
