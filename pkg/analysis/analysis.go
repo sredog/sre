@@ -9,7 +9,8 @@ import (
 type ObservationType int64
 
 const (
-	Hint ObservationType = iota
+	Learn ObservationType = iota
+	Hint
 	Note
 	Warning
 	Issue
@@ -26,7 +27,7 @@ type Analyser interface {
 }
 
 func (o *Observation) String() string {
-	return [...]string{"Hint", "Note", "Warning", "Issue"}[o.Type]
+	return [...]string{"Learn", "Hint", "Note", "Warning", "Issue"}[o.Type]
 }
 
 func (o *Observation) Format() string {
