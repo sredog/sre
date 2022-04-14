@@ -6,6 +6,9 @@ import (
 	"fmt"
 	"io/ioutil"
 	"time"
+
+	"github.com/enescakir/emoji"
+	"github.com/fatih/color"
 )
 
 const uptimePath = "/proc/uptime"
@@ -44,4 +47,21 @@ func NewUptime(CPUCount int) (*Uptime, error) {
 		CPUCount: CPUCount,
 	}
 	return u, nil
+}
+
+const displayFormat = `%v Uptime %v (boot @ %v)
+%v Idle time %0.2f%% (%v with %d CPUs)
+`
+
+func (u *Uptime) Display() string {
+	bold := color.New(color.Bold)
+	return fmt.Sprintf(displayFormat,
+		emoji.AlarmClock,
+		bold.Sprint(u.Uptime.String()),
+		time.Now().Add(u.Uptime*-1).Format(time.UnixDate),
+		emoji.SleepingFace,
+		(float64(u.Idle)/float64(u.CPUCount))/float64(u.Uptime)*100,
+		u.Idle,
+		u.CPUCount,
+	)
 }

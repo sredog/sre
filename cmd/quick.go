@@ -35,7 +35,16 @@ var quickCmd = &cobra.Command{
 	Short: "Quick overview of the system: CPUs, RAM, IO, net, filesystems",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("quick called")
+
+		uptime, err := uptime.NewUptime(2)
+		if err != nil {
+			panic(err)
+		}
+		_, err = fmt.Print(uptime.Display())
+		if err != nil {
+			panic(err)
+		}
+
 		p, err := procfs.NewDefaultFS()
 		if err != nil {
 			panic(err)
@@ -45,14 +54,6 @@ var quickCmd = &cobra.Command{
 			panic(err)
 		}
 		_, err = fmt.Printf("Load averages: %v, %v, %v\n", la.Load1, la.Load5, la.Load15)
-		if err != nil {
-			panic(err)
-		}
-		uptime, err := uptime.NewUptime(2)
-		if err != nil {
-			panic(err)
-		}
-		_, err = fmt.Printf("Uptime %v, %v\n", uptime.Uptime, uptime.Idle)
 		if err != nil {
 			panic(err)
 		}
