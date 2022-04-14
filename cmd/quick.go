@@ -27,6 +27,7 @@ import (
 	"github.com/prometheus/procfs"
 	"github.com/spf13/cobra"
 	"github.com/sredog/sre/pkg/analysis"
+	"github.com/sredog/sre/pkg/loadavg"
 	"github.com/sredog/sre/pkg/uptime"
 )
 
@@ -37,6 +38,11 @@ var quickCmd = &cobra.Command{
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 
+		p, err := procfs.NewDefaultFS()
+		if err != nil {
+			panic(err)
+		}
+
 		var probes []analysis.Probe
 
 		uptime, err := uptime.NewUptime(2)
@@ -44,6 +50,12 @@ var quickCmd = &cobra.Command{
 			panic(err)
 		}
 		probes = append(probes, uptime)
+
+		la, err := loadavg.NewLoadAverage(p)
+		if err != nil {
+			panic(err)
+		}
+		probes = append(probes, la)
 
 		for _, probe := range probes {
 			output := probe.Display()
@@ -57,19 +69,6 @@ var quickCmd = &cobra.Command{
 					panic(err)
 				}
 			}
-		}
-
-		p, err := procfs.NewDefaultFS()
-		if err != nil {
-			panic(err)
-		}
-		la, err := p.LoadAvg()
-		if err != nil {
-			panic(err)
-		}
-		_, err = fmt.Printf("Load averages: %v, %v, %v\n", la.Load1, la.Load5, la.Load15)
-		if err != nil {
-			panic(err)
 		}
 	},
 }

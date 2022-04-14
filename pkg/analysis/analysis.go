@@ -9,8 +9,8 @@ import (
 type ObservationType int64
 
 const (
-	Note ObservationType = iota
-	Hint
+	Hint ObservationType = iota
+	Note
 	Warning
 	Issue
 )
@@ -48,7 +48,7 @@ func (o *Observation) Format() string {
 	case Issue:
 		textColor = color.New(color.Bold, color.BgHiRed)
 	default:
-		textColor = color.New(color.BgGreen)
+		textColor = color.New(color.Italic)
 	}
 	return fmt.Sprintf("%s: %s", textColor.Sprint(o.ToString()), o.Message)
 }
