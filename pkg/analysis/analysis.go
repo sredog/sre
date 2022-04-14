@@ -25,7 +25,7 @@ type Analyser interface {
 	Analysis() []*Observation
 }
 
-func (o *Observation) ToString() string {
+func (o *Observation) String() string {
 	return [...]string{"Hint", "Note", "Warning", "Issue"}[o.Type]
 }
 
@@ -41,5 +41,5 @@ func (o *Observation) Format() string {
 	default:
 		textColor = color.New(color.Italic)
 	}
-	return fmt.Sprintf("%s: %s", textColor.Sprint(o.ToString()), o.Message)
+	return fmt.Sprintf("%s: %s", textColor.Sprint(o.String()), o.Message)
 }
