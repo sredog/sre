@@ -103,7 +103,6 @@ func (p *KernelRingBufferProbe) Display() string {
 }
 
 func (p *KernelRingBufferProbe) Analysis() (observations []*analysis.Observation) {
-	observations = append(observations, p.Observations...)
 	if len(p.OOMVictims) > 0 {
 		var total int64 = 0
 		for _, v := range p.OOMVictims {
