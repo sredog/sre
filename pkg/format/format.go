@@ -2,13 +2,13 @@ package format
 
 import "github.com/fatih/color"
 
-func ColorForUtilization(utilization float64) (textColor *color.Color) {
+func ColorForUtilization(utilization, high, mid, low float64) (textColor *color.Color) {
 	switch {
-	case utilization > 0.9:
+	case utilization > high:
 		textColor = color.New(color.Bold, color.BlinkSlow, color.BgHiRed)
-	case utilization > 0.8:
+	case utilization > mid:
 		textColor = color.New(color.Bold, color.BgHiRed)
-	case utilization > 0.5:
+	case utilization > low:
 		textColor = color.New(color.Bold, color.FgYellow)
 	default:
 		textColor = color.New(color.Bold)

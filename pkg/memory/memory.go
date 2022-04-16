@@ -42,13 +42,15 @@ Kernel slab: %v (reclaimable: %v, or %s)
 
 func (p *MemoryProbe) Display() string {
 	bold := color.New(color.Bold)
-	var utilization float64 = 1 - (float64(*p.Meminfo.MemAvailable) / float64(*p.Meminfo.MemTotal))
-	textColor := format.ColorForUtilization(utilization)
+	var memoryUtilization float64 = 1 - (float64(*p.Meminfo.MemAvailable) / float64(*p.Meminfo.MemTotal))
+	memoryColor := format.ColorForUtilization(memoryUtilization, 0.9, 0.75, 0.5)
 	var slabReclaimable float64 = (float64(*p.Meminfo.SReclaimable) / float64(*p.Meminfo.Slab))
+	var slabOfTotal float64 = (float64(*p.Meminfo.Slab) / float64(*p.Meminfo.MemTotal))
+	slabColor := format.ColorForUtilization(slabOfTotal, 0.2, 0.1, 0.75)
 	var factor uint64 = 1000
 	return fmt.Sprintf(displayFormat,
 		emoji.ComputerDisk,
-		textColor.Sprintf("%0.2f%%", utilization*100),
+		memoryColor.Sprintf("%0.2f%%", memoryUtilization*100),
 		// all the values in /proc/meminfo are in kB
 		bold.Sprint(humanize.Bytes(factor**p.Meminfo.MemTotal)),
 		bold.Sprint(humanize.Bytes(factor**p.Meminfo.MemAvailable)),
@@ -57,9 +59,9 @@ func (p *MemoryProbe) Display() string {
 		bold.Sprint(humanize.Bytes(factor**p.Meminfo.Buffers)),
 		bold.Sprint(humanize.Bytes(factor**p.Meminfo.SwapTotal)),
 		bold.Sprint(humanize.Bytes(factor**p.Meminfo.SwapFree)),
-		bold.Sprint(humanize.Bytes(factor**p.Meminfo.Slab)),
+		slabColor.Sprint(humanize.Bytes(factor**p.Meminfo.Slab)),
 		bold.Sprint(humanize.Bytes(factor**p.Meminfo.SReclaimable)),
-		textColor.Sprintf("%0.2f%%", slabReclaimable*100),
+		bold.Sprintf("%0.2f%%", slabReclaimable*100),
 	)
 }
 
