@@ -33,10 +33,9 @@ func CounterToString(counter map[string]int64, sorted bool) string {
 }
 
 type KernelRingBufferProbe struct {
-	Counter      map[string]int64
-	Observations []*analysis.Observation
-	OOMRE        *regexp.Regexp
-	OOMVictims   map[string]int64
+	Counter    map[string]int64
+	OOMRE      *regexp.Regexp
+	OOMVictims map[string]int64
 }
 
 const OOMRE = `Killed process (?P<pid>\d+) \((?P<cmd>.+)\) total-vm:(.+), anon-rss:(.+), file-rss:(.+), shmem-rss:(.+)`
