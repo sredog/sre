@@ -14,14 +14,14 @@ import (
 
 const uptimePath = "/proc/uptime"
 
-type Uptime struct {
+type UptimeProbe struct {
 	Uptime   time.Duration
 	Idle     time.Duration
 	CPUCount int
 }
 
-// NewUptime reads the uptime data and returns a struct representation
-func NewUptime(CPUCount int) (*Uptime, error) {
+// NewUptimeProbe reads the uptime data and returns a struct representation
+func NewUptimeProbe(CPUCount int) (*UptimeProbe, error) {
 	content, err := ioutil.ReadFile(uptimePath)
 	if err != nil {
 		return nil, err
@@ -42,7 +42,7 @@ func NewUptime(CPUCount int) (*Uptime, error) {
 		return nil, fmt.Errorf("Expected to read two int values, got %s", content)
 
 	}
-	u := &Uptime{
+	u := &UptimeProbe{
 		Uptime:   time.Duration(up*1000) * time.Millisecond,
 		Idle:     time.Duration(idle*1000) * time.Millisecond,
 		CPUCount: CPUCount,
@@ -52,7 +52,7 @@ func NewUptime(CPUCount int) (*Uptime, error) {
 
 // Utilization returns ratio spent outside Idle process since boot
 // averaged out by the number of cpus
-func (u *Uptime) Utilization() float64 {
+func (u *UptimeProbe) Utilization() float64 {
 	return 1 - (float64(u.Idle)/float64(u.CPUCount))/float64(u.Uptime)
 }
 
@@ -60,7 +60,7 @@ const displayFormat = `%v Uptime %v (boot @ %v)
 %v Idle time %v (%v with %d CPUs)
 `
 
-func (u *Uptime) Display() string {
+func (u *UptimeProbe) Display() string {
 	bold := color.New(color.Bold)
 	return fmt.Sprintf(displayFormat,
 		emoji.AlarmClock,
@@ -73,7 +73,7 @@ func (u *Uptime) Display() string {
 	)
 }
 
-func (u *Uptime) Analysis() (observations []*analysis.Observation) {
+func (u *UptimeProbe) Analysis() (observations []*analysis.Observation) {
 	if u.Uptime < time.Hour*time.Duration(24) {
 		observations = append(observations, &analysis.Observation{
 			Type:    analysis.Note,

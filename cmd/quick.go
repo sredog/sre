@@ -46,7 +46,7 @@ var quickCmd = &cobra.Command{
 
 		var probes []analysis.Probe
 
-		uptime, err := uptime.NewUptime(2)
+		uptime, err := uptime.NewUptimeProbe(2)
 		if err != nil {
 			panic(err)
 		}
