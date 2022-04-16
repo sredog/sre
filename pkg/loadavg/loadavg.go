@@ -16,17 +16,17 @@ type LoadAvgProvider interface {
 	LoadAvg() (*procfs.LoadAvg, error)
 }
 
-type LoadAverage struct {
+type LoadAverageProbe struct {
 	L *procfs.LoadAvg
 }
 
 // NewLoadAverage reads the load average data and returns its representation
-func NewLoadAverage(p LoadAvgProvider) (*LoadAverage, error) {
+func NewLoadAverage(p LoadAvgProvider) (*LoadAverageProbe, error) {
 	l, err := p.LoadAvg()
 	if err != nil {
 		return nil, err
 	}
-	la := &LoadAverage{
+	la := &LoadAverageProbe{
 		L: l,
 	}
 	return la, nil
@@ -34,7 +34,7 @@ func NewLoadAverage(p LoadAvgProvider) (*LoadAverage, error) {
 
 const displayFormat = "%v Load avg: %v (1m), %v (5m), %v (15m)\n"
 
-func (la *LoadAverage) Display() string {
+func (la *LoadAverageProbe) Display() string {
 	bold := color.New(color.Bold)
 	return fmt.Sprintf(displayFormat,
 		emoji.ChartIncreasing,
@@ -44,7 +44,7 @@ func (la *LoadAverage) Display() string {
 	)
 }
 
-func (la *LoadAverage) Analysis() (observations []*analysis.Observation) {
+func (la *LoadAverageProbe) Analysis() (observations []*analysis.Observation) {
 	epsilon := 0.01
 	if la.L.Load1 < epsilon && la.L.Load5 < epsilon && la.L.Load15 < epsilon {
 		observations = append(observations, &analysis.Observation{
