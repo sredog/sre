@@ -26,6 +26,12 @@ import (
 
 	"github.com/prometheus/procfs"
 	"github.com/spf13/cobra"
+	"github.com/sredog/sre/pkg/analysis"
+	"github.com/sredog/sre/pkg/cpu"
+	"github.com/sredog/sre/pkg/kmsgprobe"
+	"github.com/sredog/sre/pkg/loadavg"
+	"github.com/sredog/sre/pkg/memory"
+	"github.com/sredog/sre/pkg/processes"
 	"github.com/sredog/sre/pkg/uptime"
 )
 
@@ -35,26 +41,62 @@ var quickCmd = &cobra.Command{
 	Short: "Quick overview of the system: CPUs, RAM, IO, net, filesystems",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("quick called")
+
 		p, err := procfs.NewDefaultFS()
 		if err != nil {
 			panic(err)
 		}
-		la, err := p.LoadAvg()
+
+		var probes []analysis.Probe
+
+		uptime, err := uptime.NewUptimeProbe(2)
 		if err != nil {
 			panic(err)
 		}
-		_, err = fmt.Printf("Load averages: %v, %v, %v\n", la.Load1, la.Load5, la.Load15)
+		probes = append(probes, uptime)
+
+		la, err := loadavg.NewLoadAverage(p)
 		if err != nil {
 			panic(err)
 		}
-		uptime, err := uptime.NewUptime(2)
+		probes = append(probes, la)
+
+		krbp, err := kmsgprobe.NewKernelRingBufferProbe()
 		if err != nil {
 			panic(err)
 		}
-		_, err = fmt.Printf("Uptime %v, %v\n", uptime.Uptime, uptime.Idle)
+		probes = append(probes, krbp)
+
+		mp, err := memory.NewMemoryProbe(p)
 		if err != nil {
 			panic(err)
+		}
+		probes = append(probes, mp)
+
+		pp, err := processes.NewProcessesProbe(p)
+		if err != nil {
+			panic(err)
+		}
+		probes = append(probes, pp)
+
+		cp, err := cpu.NewCPUProbe(p)
+		if err != nil {
+			panic(err)
+		}
+		probes = append(probes, cp)
+
+		for _, probe := range probes {
+			output := probe.Display()
+			_, err = fmt.Print(output)
+			if err != nil {
+				panic(err)
+			}
+			for _, observation := range probe.Analysis() {
+				_, err = fmt.Printf("%s\n", observation.Format())
+				if err != nil {
+					panic(err)
+				}
+			}
 		}
 	},
 }
