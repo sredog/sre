@@ -105,5 +105,12 @@ func (p *ProcessesProbe) Display() string {
 }
 
 func (p *ProcessesProbe) Analysis() (observations []*analysis.Observation) {
+	var utilization float64 = float64(p.TotalProcs) / float64(p.PIDMax)
+	if utilization > 0.75 {
+		observations = append(observations, &analysis.Observation{
+			Type:    analysis.Warning,
+			Message: "You're running out of PIDs - check for zombies",
+		})
+	}
 	return
 }
