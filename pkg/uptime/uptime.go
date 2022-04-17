@@ -56,8 +56,9 @@ func (u *UptimeProbe) Utilization() float64 {
 	return 1 - (float64(u.Idle)/float64(u.CPUCount))/float64(u.Uptime)
 }
 
-const displayFormat = `%v Uptime %v (boot @ %v)
-%v Idle time %v (%v with %d CPUs)
+const displayFormat = `%v Uptime %v
+Last boot @ %v
+Idle time %v (%v with %d CPUs)
 `
 
 func (u *UptimeProbe) Display() string {
@@ -66,7 +67,7 @@ func (u *UptimeProbe) Display() string {
 		emoji.AlarmClock,
 		bold.Sprint(u.Uptime.String()),
 		time.Now().Add(u.Uptime*-1).Format(time.UnixDate),
-		emoji.SleepingFace,
+		// emoji.SleepingFace,
 		bold.Sprintf("%0.2f%%", (1-u.Utilization())*100),
 		u.Idle,
 		u.CPUCount,
