@@ -52,13 +52,13 @@ func (la *LoadAverageProbe) Analysis() (observations []*analysis.Observation) {
 			Message: "The system appears idle",
 		})
 	}
-	if la.L.Load1 > la.L.Load5 || la.L.Load1 > la.L.Load15 {
+	if la.L.Load1 > la.L.Load5 && la.L.Load1 > la.L.Load15 {
 		observations = append(observations, &analysis.Observation{
 			Type:    analysis.Note,
 			Message: "The load is increasing",
 		})
 	}
-	if la.L.Load1 < la.L.Load5 || la.L.Load1 < la.L.Load15 {
+	if la.L.Load1 < la.L.Load5 && la.L.Load1 < la.L.Load15 {
 		observations = append(observations, &analysis.Observation{
 			Type:    analysis.Note,
 			Message: "The load is decreasing",
