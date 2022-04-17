@@ -46,7 +46,7 @@ func (p *MemoryProbe) Display() string {
 	memoryColor := format.ColorForUtilization(memoryUtilization, 0.9, 0.75, 0.5)
 	var slabReclaimable float64 = (float64(*p.Meminfo.SReclaimable) / float64(*p.Meminfo.Slab))
 	var slabOfTotal float64 = (float64(*p.Meminfo.Slab) / float64(*p.Meminfo.MemTotal))
-	slabColor := format.ColorForUtilization(slabOfTotal, 0.2, 0.1, 0.75)
+	slabColor := format.ColorForUtilization(slabOfTotal, 0.2, 0.1, 0.075)
 	var factor uint64 = 1000
 	return fmt.Sprintf(displayFormat,
 		emoji.ComputerDisk,
