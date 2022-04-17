@@ -27,6 +27,7 @@ import (
 	"github.com/prometheus/procfs"
 	"github.com/spf13/cobra"
 	"github.com/sredog/sre/pkg/analysis"
+	"github.com/sredog/sre/pkg/cpu"
 	"github.com/sredog/sre/pkg/kmsgprobe"
 	"github.com/sredog/sre/pkg/loadavg"
 	"github.com/sredog/sre/pkg/memory"
@@ -77,6 +78,12 @@ var quickCmd = &cobra.Command{
 			panic(err)
 		}
 		probes = append(probes, pp)
+
+		cp, err := cpu.NewCPUProbe(p)
+		if err != nil {
+			panic(err)
+		}
+		probes = append(probes, cp)
 
 		for _, probe := range probes {
 			output := probe.Display()
