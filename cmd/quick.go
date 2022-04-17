@@ -30,6 +30,7 @@ import (
 	"github.com/sredog/sre/pkg/kmsgprobe"
 	"github.com/sredog/sre/pkg/loadavg"
 	"github.com/sredog/sre/pkg/memory"
+	"github.com/sredog/sre/pkg/processes"
 	"github.com/sredog/sre/pkg/uptime"
 )
 
@@ -70,6 +71,12 @@ var quickCmd = &cobra.Command{
 			panic(err)
 		}
 		probes = append(probes, mp)
+
+		pp, err := processes.NewProcessesProbe(p)
+		if err != nil {
+			panic(err)
+		}
+		probes = append(probes, pp)
 
 		for _, probe := range probes {
 			output := probe.Display()
