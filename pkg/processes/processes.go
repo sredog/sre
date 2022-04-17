@@ -92,12 +92,11 @@ const displayFormat = `%v Total processes: %v (%v utilization)
 
 func (p *ProcessesProbe) Display() string {
 	bold := color.New(color.Bold)
-	totalProcs := p.TotalProcs
-	var utilization float64 = float64(totalProcs) / float64(p.PIDMax)
+	var utilization float64 = float64(p.TotalProcs) / float64(p.PIDMax)
 	utilisationColor := format.ColorForUtilization(utilization, 0.9, 0.75, 0.5)
 	return fmt.Sprintf(displayFormat,
 		emoji.RunningShoe,
-		bold.Sprintf("%d", totalProcs),
+		bold.Sprintf("%d", p.TotalProcs),
 		utilisationColor.Sprintf("%0.2f%%", utilization*100),
 		bold.Sprintf("%d", p.Stat.ProcessesRunning),
 		bold.Sprintf("%d", p.Stat.ProcessesBlocked),
