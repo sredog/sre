@@ -28,4 +28,4 @@ jobs:
           args: release --snapshot --rm-dist
       -
         name: Check that it runs
-        run: ./dist/sre_linux_amd64/sre -h
+        run: ./dist/*amd64*/sre -h
