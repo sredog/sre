@@ -32,8 +32,8 @@ var toolsCmd = &cobra.Command{
 	Use:   "tools",
 	Short: "Learn command line tools to debug various components of the system",
 	Long:  ``,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("tools called")
+	RunE: func(cmd *cobra.Command, args []string) error {
+		return fmt.Errorf("tools not implemented")
 	},
 }
 

@@ -32,8 +32,8 @@ var analysisCmd = &cobra.Command{
 	Use:   "analysis",
 	Short: "Auto-find issues in the output of various standard tools",
 	Long:  ``,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("analysis called")
+	RunE: func(cmd *cobra.Command, args []string) error {
+		return fmt.Errorf("analysis not implemented")
 	},
 }
 

@@ -21,8 +21,21 @@ THE SOFTWARE.
 */
 package main
 
-import "github.com/sredog/sre/cmd"
+import (
+	"context"
+	"log"
+	"os"
+	"os/signal"
+	"syscall"
+
+	"github.com/sredog/sre/cmd"
+)
 
 func main() {
-	cmd.Execute()
+	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer cancel()
+
+	if err := cmd.Execute(ctx); err != nil {
+		log.Fatal(err)
+	}
 }
