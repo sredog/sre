@@ -33,8 +33,7 @@ var useCmd = &cobra.Command{
 	Short: "USE (Utilisation, Saturation, Errors) analysis on the system",
 	Long:  ``,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		fmt.Println("use called")
-		return nil
+		return fmt.Errorf("use not implemented")
 	},
 }
 
