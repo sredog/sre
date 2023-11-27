@@ -1,9 +1,9 @@
 name: ci
 
 on:
-  pull_request
+  pull_request:
   # Allow manual triggering
-  workflow_dispatch
+  workflow_dispatch:
 
 concurrency:
   # Allow a single build per branch per workflow
