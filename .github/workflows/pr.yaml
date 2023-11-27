@@ -1,31 +1,47 @@
-name: goreleaser
+name: ci
+run-name: 'CI run for "${{ github.ref_name }}"'
 
 on:
   pull_request:
+  # Allow manual triggering
+  workflow_dispatch:
+
+concurrency:
+  # Allow a single build per branch per workflow
+  group: ${{ github.workflow }}-${{ github.ref }}
+  # Cancel in-progress builds for non-main branches
+  cancel-in-progress: ${{ github.ref_name != 'main' }}
 
 jobs:
-  goreleaser:
+  ci:
     runs-on: ubuntu-latest
     steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      -
-        name: Set up Go
-        uses: actions/setup-go@v3
-        with:
-          go-version: '>=1.18.0'
-      -
-        run: go version
-      -
-        name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v2
-        with:
-          distribution: goreleaser
-          version: latest
-          args: release --snapshot --rm-dist
-      -
-        name: Check that it runs
-        run: ./dist/*amd64*/sre -h
+
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: '>=1.18.0'
+
+    - name: Check go working
+      run: go version
+
+    - name: Check format
+      run: >-
+        test -z $(gofmt -l -s .) || (echo "Format violations found: run gofmt" && exit 1)
+
+    # TODO(ofats): go mod tidy checker
+
+    - name: Run GoReleaser
+      uses: goreleaser/goreleaser-action@v5
+      with:
+        distribution: goreleaser
+        version: latest
+        args: release --snapshot --clean
+
+    - name: Check that it runs
+      run: ./dist/*amd64*/sre -h
