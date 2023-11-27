@@ -30,7 +30,7 @@ jobs:
       run: go version
 
     - name: Check format
-      run: gofmt -d -l -s
+      run: gofmt -d -l -s .
 
     # TODO(ofats): go mod tidy checker
 
