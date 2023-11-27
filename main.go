@@ -21,6 +21,7 @@ THE SOFTWARE.
 */
 package main
 
+
 import "github.com/sredog/sre/cmd"
 
 func main() {
