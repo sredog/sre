@@ -30,7 +30,7 @@ jobs:
       run: go version
 
     - name: Check format
-      run: gofmt -d -l -s .
+      run: test -z $(gofmt -l -s .) || (echo "Format violations found: run gofmt" && exit 1)
 
     # TODO(ofats): go mod tidy checker
 
