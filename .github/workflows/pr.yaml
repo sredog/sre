@@ -40,7 +40,7 @@ jobs:
       with:
         distribution: goreleaser
         version: latest
-        args: release --snapshot --rm-dist
+        args: release --snapshot --clean
 
     - name: Check that it runs
       run: ./dist/*amd64*/sre -h
