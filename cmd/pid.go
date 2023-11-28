@@ -32,8 +32,8 @@ var pidCmd = &cobra.Command{
 	Use:   "pid",
 	Short: "Display info per-process",
 	Long:  `.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("pid called")
+	RunE: func(cmd *cobra.Command, args []string) error {
+		return fmt.Errorf("pid not implemented")
 	},
 }
 

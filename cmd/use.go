@@ -32,8 +32,8 @@ var useCmd = &cobra.Command{
 	Use:   "use",
 	Short: "USE (Utilisation, Saturation, Errors) analysis on the system",
 	Long:  ``,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("use called")
+	RunE: func(cmd *cobra.Command, args []string) error {
+		return fmt.Errorf("use not implemented")
 	},
 }
 

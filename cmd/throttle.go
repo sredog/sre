@@ -32,8 +32,8 @@ var throttleCmd = &cobra.Command{
 	Use:   "throttle",
 	Short: "List CPU-throttled processes",
 	Long:  ``,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("throttle called")
+	RunE: func(cmd *cobra.Command, args []string) error {
+		return fmt.Errorf("throttle not implemented")
 	},
 }
 

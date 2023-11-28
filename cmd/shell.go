@@ -32,8 +32,8 @@ var shellCmd = &cobra.Command{
 	Use:   "shell",
 	Short: "Better shell with autocompletion for common SRE tools",
 	Long:  ``,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("shell called")
+	RunE: func(cmd *cobra.Command, args []string) error {
+		return fmt.Errorf("shell not implemented")
 	},
 }
 
